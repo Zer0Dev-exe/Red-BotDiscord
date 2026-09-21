@@ -452,9 +452,49 @@ def red_exception_handler(red, red_task: asyncio.Future):
         sys.exit(ExitCodes.CRITICAL)
 
 
+def _load_env_defaults(cli_flags: Namespace) -> None:
+    env_path = Path.cwd() / ".env"
+    if env_path.exists():
+        try:
+            from dotenv import dotenv_values
+            env = dotenv_values(env_path)
+        except Exception:
+            env = {}
+            with env_path.open(encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        k, v = line.split("=", 1)
+                        env[k.strip()] = v.strip().strip("'\"")
+
+        for k, v in env.items():
+            if v is not None and k not in os.environ:
+                os.environ[k] = str(v)
+
+        if not cli_flags.instance_name:
+            cli_flags.instance_name = os.environ.get("INSTANCE_NAME") or "RedBot"
+
+        if not cli_flags.token:
+            token = os.environ.get("TOKEN") or os.environ.get("DISCORD_TOKEN") or os.environ.get("RED_TOKEN")
+            if token and token != "tu_token_de_discord_aqui":
+                cli_flags.token = token
+
+        if not cli_flags.prefix and os.environ.get("PREFIX"):
+            prefixes = [p.strip() for p in os.environ["PREFIX"].replace(",", " ").split() if p.strip()]
+            if prefixes:
+                cli_flags.prefix = prefixes
+
+        if not cli_flags.owner and os.environ.get("OWNER_ID"):
+            try:
+                cli_flags.owner = int(os.environ["OWNER_ID"])
+            except ValueError:
+                pass
+
+
 def main():
     red = None  # Error handling for users misusing the bot
     cli_flags = parse_cli_flags(sys.argv[1:])
+    _load_env_defaults(cli_flags)
     handle_early_exit_flags(cli_flags)
     if cli_flags.edit:
         early_exit_runner(cli_flags, edit_instance)

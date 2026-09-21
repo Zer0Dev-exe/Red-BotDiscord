@@ -1,11 +1,29 @@
-# Script de arranque rápido para PowerShell
+# Script de arranque rápido para PowerShell con soporte para .env
 $ErrorActionPreference = "Stop"
 
 Write-Host "===================================================" -ForegroundColor Cyan
-Write-Host "           Iniciando Red-DiscordBot                " -ForegroundColor Cyan
+Write-Host "       Iniciando Red-DiscordBot (.env)             " -ForegroundColor Cyan
 Write-Host "===================================================" -ForegroundColor Cyan
 
-# 1. Comprobar entornos virtuales existentes
+# 1. Comprobar si existe el archivo .env
+if (-not (Test-Path ".\.env")) {
+    if (Test-Path ".\.env.example") {
+        Copy-Item ".\.env.example" ".\.env"
+        Write-Host ""
+        Write-Host "=================================================================" -ForegroundColor Yellow
+        Write-Host " [AVISO] Se ha creado un archivo .env a partir de .env.example   " -ForegroundColor Yellow
+        Write-Host "=================================================================" -ForegroundColor Yellow
+        Write-Host " Por favor, abre el archivo .env en tu editor y coloca tu TOKEN: " -ForegroundColor Yellow
+        Write-Host "   TOKEN=tu_token_de_discord_aqui                                " -ForegroundColor White
+        Write-Host ""
+        Write-Host " Luego vuelve a ejecutar iniciar.ps1." -ForegroundColor Yellow
+        Write-Host "=================================================================" -ForegroundColor Yellow
+        Write-Host ""
+        return
+    }
+}
+
+# 2. Comprobar entornos virtuales existentes
 $VenvGlobal = "$HOME\redenv\Scripts\Activate.ps1"
 $VenvLocal = ".\.venv\Scripts\Activate.ps1"
 
@@ -24,10 +42,9 @@ if (Test-Path $VenvGlobal) {
     pip install -r requirements.txt
 }
 
-# 2. Iniciar RedBot
-Write-Host "[INFO] Encendiendo RedBot..." -ForegroundColor Cyan
+# 3. Iniciar RedBot mediante run.py
 try {
-    redbot RedBot
+    python run.py $args
 } catch {
-    Write-Host "[AVISO] Si es la primera vez que configuras la instancia, ejecuta 'redbot-setup'." -ForegroundColor Yellow
+    Write-Host "[INFO] El bot se ha detenido: $_" -ForegroundColor Yellow
 }

@@ -92,6 +92,53 @@ def create_temp_config():
         json.dump(config, fs, indent=4)
 
 
+def _auto_provision_from_env(name: str) -> Dict[str, Any]:
+    env_path = Path.cwd() / ".env"
+    env: Dict[str, Any] = {}
+    if env_path.exists():
+        try:
+            from dotenv import dotenv_values
+            env = dotenv_values(env_path)
+        except Exception:
+            with env_path.open(encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        k, v = line.split("=", 1)
+                        env[k.strip()] = v.strip().strip("'\"")
+
+    data_path_raw = (env.get("DATA_PATH") or "").strip()
+    if data_path_raw:
+        data_path = str((Path.cwd() / data_path_raw).resolve())
+    else:
+        data_path = str((Path(appdir.user_data_dir) / "data" / name).resolve())
+
+    Path(data_path).mkdir(parents=True, exist_ok=True)
+    storage_type = (env.get("STORAGE_TYPE") or "JSON").strip().upper()
+    storage_details: Dict[str, Any] = {}
+    if storage_type == "POSTGRES":
+        storage_details = {
+            "host": env.get("POSTGRES_HOST", "localhost"),
+            "port": int(env.get("POSTGRES_PORT", "5432") or 5432),
+            "user": env.get("POSTGRES_USER", "postgres"),
+            "password": env.get("POSTGRES_PASSWORD", ""),
+            "database": env.get("POSTGRES_DB", "redbot"),
+        }
+
+    config = load_existing_config()
+    entry = deepcopy(basic_config_default)
+    entry["DATA_PATH"] = data_path
+    entry["STORAGE_TYPE"] = storage_type
+    entry["STORAGE_DETAILS"] = storage_details
+
+    config[name] = entry
+    config_dir.mkdir(parents=True, exist_ok=True)
+    with config_file.open("w", encoding="utf-8") as fs:
+        json.dump(config, fs, indent=4)
+
+    return entry
+
+
 def load_basic_configuration(instance_name_: str):
     """Loads the basic bootstrap configuration necessary for `Config`
     to know where to store or look for data.
@@ -104,7 +151,7 @@ def load_basic_configuration(instance_name_: str):
     ----------
     instance_name_ : str
         The instance name given by CLI argument and created during
-        redbot setup.
+        redbot setup or loaded from .env.
     """
     global basic_config
     global _instance_name
@@ -114,19 +161,12 @@ def load_basic_configuration(instance_name_: str):
         with config_file.open(encoding="utf-8") as fs:
             config = json.load(fs)
     except FileNotFoundError:
-        print(
-            "You need to configure the bot instance using `redbot-setup`"
-            " prior to running the bot."
-        )
-        sys.exit(ExitCodes.CONFIGURATION_ERROR)
-    try:
+        config = {}
+
+    if _instance_name not in config:
+        basic_config = _auto_provision_from_env(_instance_name)
+    else:
         basic_config = config[_instance_name]
-    except KeyError:
-        print(
-            f"Instance with name '{_instance_name}' doesn't exist."
-            " You can create new instance using `redbot-setup` prior to running the bot."
-        )
-        sys.exit(ExitCodes.INVALID_CLI_USAGE)
 
 
 def _base_data_path() -> Path:

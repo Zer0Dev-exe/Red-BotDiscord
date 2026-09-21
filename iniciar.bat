@@ -3,10 +3,29 @@ chcp 65001 > nul
 title Red-DiscordBot
 
 echo ===================================================
-echo           Iniciando Red-DiscordBot
+echo           Iniciando Red-DiscordBot (.env)
 echo ===================================================
 
-:: 1. Comprobar si ya existe el entorno virtual global o local
+:: 1. Comprobar si existe el archivo .env
+if not exist ".env" (
+    if exist ".env.example" (
+        copy ".env.example" ".env" > nul
+        echo.
+        echo =================================================================
+        echo  [AVISO] Se ha creado un archivo .env a partir de .env.example
+        echo =================================================================
+        echo  Por favor, abre el archivo .env en tu editor y coloca tu TOKEN:
+        echo    TOKEN=tu_token_de_discord_aqui
+        echo.
+        echo  Luego vuelve a ejecutar iniciar.bat.
+        echo =================================================================
+        echo.
+        pause
+        exit /b 0
+    )
+)
+
+:: 2. Comprobar si ya existe el entorno virtual global o local
 if exist "%USERPROFILE%\redenv\Scripts\activate.bat" (
     echo [INFO] Activando entorno virtual en %%USERPROFILE%%\redenv...
     call "%USERPROFILE%\redenv\Scripts\activate.bat"
@@ -19,7 +38,7 @@ if exist ".venv\Scripts\activate.bat" (
     goto RUN
 )
 
-:: 2. Si no existe ningún venv, crearlo automáticamente con Python 3.11
+:: 3. Si no existe ningún venv, crearlo automáticamente con Python 3.11
 echo [INFO] No se encontró entorno virtual. Creando uno nuevo con Python 3.11...
 py -3.11 -m venv .venv
 if %errorlevel% neq 0 (
@@ -36,12 +55,11 @@ echo [INFO] Instalando dependencias necesarias...
 python -m pip install -U pip wheel
 pip install -r requirements.txt
 
-:: 3. Ejecutar RedBot
+:: 4. Ejecutar RedBot mediante run.py
 :RUN
-echo [INFO] Encendiendo RedBot...
-redbot RedBot
+python run.py %*
 if %errorlevel% neq 0 (
     echo.
-    echo [AVISO] Si es la primera vez en este equipo, ejecuta: redbot-setup
+    echo [INFO] El bot se ha detenido con código de salida %errorlevel%.
     pause
 )

@@ -35,7 +35,7 @@
 
 Esta es una versión **auto-alojada (self-hosted)**: se ejecuta en tu propio equipo o servidor con control total sobre tus datos y configuraciones.
 
-## ⚡ Inicio Rápido (Despliegue en 1 paso)
+## ⚡ Inicio Rápido (Control Total con `.env`)
 
 Para clonar y poner a funcionar este bot fácilmente:
 
@@ -45,11 +45,22 @@ Para clonar y poner a funcionar este bot fácilmente:
    cd Red-BotDiscord
    ```
 
-2. **Encender el bot:**
-   * En Windows: Haz doble clic en **`iniciar.bat`** (o ejecuta `.\iniciar.ps1` en PowerShell).
-   * El script creará y activará el entorno virtual `.venv` con Python 3.11, instalará los paquetes requeridos y arrancará el bot de inmediato.
+2. **Configurar el archivo `.env`:**
+   * Al ejecutar el bot por primera vez, se creará automáticamente el archivo `.env` a partir de `.env.example`.
+   * Abre el archivo `.env` y pega el token de tu bot obtenido desde el [Discord Developer Portal](https://discord.com/developers/applications):
+     ```env
+     TOKEN=tu_token_de_discord_aqui
+     PREFIX=!
+     ```
+   * *Opcional:* Puedes configurar en `.env` tu `OWNER_ID`, la carpeta de datos (`DATA_PATH`), el tipo de almacenamiento (`STORAGE_TYPE`), etc.
 
-> **Nota:** La primera vez que lo uses en un equipo nuevo, ejecuta `redbot-setup` para crear la instancia (por defecto llamada `RedBot`) e introduce el Token de tu bot obtenido desde el [Discord Developer Portal](https://discord.com/developers/applications).
+3. **Encender el bot:**
+   * En Windows: Haz doble clic en **`iniciar.bat`** (o ejecuta `.\iniciar.ps1` en PowerShell).
+   * O desde cualquier terminal con Python: `python run.py`
+   * El script activará el entorno virtual, instalará dependencias, aprovisionará la instancia automáticamente y arrancará el bot de inmediato.
+
+> **¡Sin `redbot-setup`!** Todo se administra desde el archivo `.env`, ofreciendo máxima comodidad, portabilidad y control.
+
 
 ## 📦 Módulos Incluidos
 

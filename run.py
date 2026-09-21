@@ -246,19 +246,25 @@ def build_cli_args(env: Dict[str, str], instance_name: str) -> List[str]:
 
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):
+        try:
+            sys.stdout.reconfigure(encoding="utf-8")
+        except Exception:
+            pass
+
     # 1. Cargar .env
     env = load_environment()
 
     token = (env.get("TOKEN") or env.get("DISCORD_TOKEN") or env.get("RED_TOKEN") or "").strip()
     if not token or token == "tu_token_de_discord_aqui":
-        print("\n" + "=" * 65)
-        print(" [ERROR] El TOKEN de Discord no está configurado.")
-        print("=" * 65)
-        print(" Por favor abre el archivo .env y asigna tu token en:")
-        print("   TOKEN=tu_token_aqui\n")
-        print(" Si aún no tienes un bot, créalo en:")
-        print("   https://discord.com/developers/applications")
-        print("=" * 65 + "\n")
+        print("\n" + "=" * 65, flush=True)
+        print(" [ERROR] El TOKEN de Discord no está configurado.", flush=True)
+        print("=" * 65, flush=True)
+        print(" Por favor abre el archivo .env y asigna tu token en:", flush=True)
+        print("   TOKEN=tu_token_aqui\n", flush=True)
+        print(" Si aún no tienes un bot, créalo en:", flush=True)
+        print("   https://discord.com/developers/applications", flush=True)
+        print("=" * 65 + "\n", flush=True)
         sys.exit(1)
 
     # 2. Aprovisionar instancia en config.json
@@ -283,16 +289,16 @@ def main():
         if arg not in bot_args:
             bot_args.append(arg)
 
-    print("=" * 65)
-    print("           Iniciando Red-DiscordBot desde .env")
-    print("=" * 65)
-    print(f" Instancia   : {instance_name}")
-    print(f" Ruta Datos  : {data_path}")
-    print(f" Backend     : {storage_type}")
-    print(f" Prefijo(s)  : {env.get('PREFIX', '!')}")
+    print("=" * 65, flush=True)
+    print("           Iniciando Red-DiscordBot desde .env", flush=True)
+    print("=" * 65, flush=True)
+    print(f" Instancia   : {instance_name}", flush=True)
+    print(f" Ruta Datos  : {data_path}", flush=True)
+    print(f" Backend     : {storage_type}", flush=True)
+    print(f" Prefijo(s)  : {env.get('PREFIX', '!')}", flush=True)
     if env.get("OWNER_ID"):
-        print(f" Propietario : {env.get('OWNER_ID')}")
-    print("=" * 65 + "\n")
+        print(f" Propietario : {env.get('OWNER_ID')}", flush=True)
+    print("=" * 65 + "\n", flush=True)
 
     # 5. Ejecutar RedBot en un bucle que soporte reinicios ([p]restart)
     # Exit code 26 indica solicitud de reinicio por parte de RedBot
