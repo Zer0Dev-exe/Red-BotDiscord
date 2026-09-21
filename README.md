@@ -56,7 +56,7 @@
   •
   <a href="#join-the-community">Community</a>
   •
-  <a href="#license">License</a>
+  <a href="#créditos--licencia">Credits & License</a>
 </p>
 
 # Overview
