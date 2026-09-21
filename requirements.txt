@@ -1,0 +1,3 @@
+# Requisitos principales para Red-DiscordBot
+Red-DiscordBot>=3.5.0,<3.6.0
+wheel
