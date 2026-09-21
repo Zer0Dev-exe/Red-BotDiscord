@@ -2345,7 +2345,10 @@ class Red(
 
     async def close(self):
         """Logs out of Discord and closes all connections."""
-        await super().close()
+        try:
+            await super().close()
+        except AttributeError:
+            pass
         await _drivers.get_driver_class().teardown()
         try:
             if self.rpc_enabled:

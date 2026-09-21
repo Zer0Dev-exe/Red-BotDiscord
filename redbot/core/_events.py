@@ -10,7 +10,10 @@ from typing import Tuple
 
 import aiohttp
 import discord
-import redbot_update
+try:
+    import redbot_update
+except ImportError:
+    redbot_update = None
 from packaging.specifiers import SpecifierSet
 from packaging.version import Version
 from redbot.core import data_manager
@@ -70,9 +73,13 @@ def get_outdated_red_messages(pypi_version: str) -> Tuple[str, str]:
         "needs to be done during the update.**"
     ).format(docs="https://docs.discord.red/en/stable/update_red.html")
 
-    redbot_update_bin = redbot_update.find_redbot_update_bin()
-    is_windows = platform.system() == "Windows"
-    update_command = f'"{redbot_update_bin}"' if is_windows else shlex.quote(redbot_update_bin)
+    if redbot_update is not None:
+        redbot_update_bin = redbot_update.find_redbot_update_bin()
+        is_windows = platform.system() == "Windows"
+        update_command = f'"{redbot_update_bin}"' if is_windows else shlex.quote(redbot_update_bin)
+    else:
+        is_windows = platform.system() == "Windows"
+        update_command = f'"{sys.executable}" -m pip install -U Red-DiscordBot'
     extra_update += _(
         "\n\nTo update your bot, first shutdown your bot"
         " then open a window of {console} (Not as admin) and run the following: {command}"
