@@ -127,13 +127,22 @@ Feel free to take a [peek](https://index.discord.red) at a list of available 3rd
 
 Join us on our [Official Discord Server](https://discord.gg/red)!
 
-# License
+# Créditos & Licencia
 
-Released under the [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.en.html) license.
+Este proyecto está basado en el software de código abierto **[Red-DiscordBot](https://github.com/Cog-Creators/Red-DiscordBot)**, originalmente desarrollado y mantenido por el equipo de **Cog-Creators** y Twentysix26.
 
-Red is named after the main character of "Transistor", a video game by [Super Giant Games](https://www.supergiantgames.com/games/transistor/).
+### 🛠️ Versión Optimizada por Zer0Dev-exe
+Esta adaptación fue preparada por **[Zer0Dev-exe](https://github.com/Zer0Dev-exe)** para ofrecer una versión optimizada, ligera y enfocada en un clonado y despliegue rápido:
+* **Limpieza de idiomas:** Se eliminaron más de 1.200 archivos de idiomas no requeridos, conservando de forma nativa únicamente el soporte en **Español** (`es-ES`) e **Inglés** (`en-US`).
+* **Estructura ligera:** Se retiraron las suites pesadas de tests, linters, archivos de integración continua (CI) y documentación web para acelerar drásticamente el tiempo de clonado y reducir el tamaño del repositorio.
+* **Arranque en 1 clic:** Se agregaron scripts automatizados para Windows (`iniciar.bat` e `iniciar.ps1`) que configuran el entorno virtual con Python 3.11, instalan dependencias y encienden el bot automáticamente.
+* **Seguridad:** Configuración de `.gitignore` y `.env.example` para prevenir la exposición accidental de tokens de Discord o claves privadas.
 
-Artwork created by [Sinlaire](https://sinlaire.deviantart.com/) on Deviant Art for the Red Discord Bot Project.
+---
 
-This project vendors [discord.ext.menus](https://github.com/Rapptz/discord-ext-menus) package made by Danny Y. (Rapptz) which is distributed under MIT License.
-A copy of this license can be found in the [discord-ext-menus.LICENSE](redbot/vendored/discord-ext-menus.LICENSE) file in the [redbot/vendored](redbot/vendored) folder of this repository.
+### 📜 Reconocimientos & Licencia
+* **Licencia:** Distribuido bajo los términos de la licencia [GNU General Public License v3 (GPLv3)](https://www.gnu.org/licenses/gpl-3.0.en.html).
+* **Personaje e Inspiración:** Red toma su nombre de la protagonista de *Transistor*, un videojuego de [Supergiant Games](https://www.supergiantgames.com/games/transistor/).
+* **Ilustración:** Arte de portada creado por [Sinlaire](https://sinlaire.deviantart.com/) en DeviantArt para el proyecto Red-DiscordBot.
+* **Paquete de terceros:** Incluye el paquete `discord.ext.menus` creado por Danny Y. (Rapptz) bajo licencia MIT ([ver licencia](redbot/vendored/discord-ext-menus.LICENSE)).
+
