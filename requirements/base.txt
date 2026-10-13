@@ -46,7 +46,7 @@ multidict==6.1.0
     # via
     #   aiohttp
     #   yarl
-orjson==3.10.15
+orjson==3.11.6
     # via -r base.in
 packaging==26.0
     # via -r base.in
