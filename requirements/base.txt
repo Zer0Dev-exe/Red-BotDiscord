@@ -34,7 +34,7 @@ linkify-it-py==2.2.0
     # via markdown-it-py
 markdown==3.10.3
     # via -r base.in
-markdown-it-py==3.0.0
+markdown-it-py==4.2.0
     # via
     #   rich
     #   textual
