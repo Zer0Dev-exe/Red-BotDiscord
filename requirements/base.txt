@@ -86,7 +86,7 @@ schema==0.7.8
     # via -r base.in
 six==1.17.0
     # via python-dateutil
-textual==6.2.1
+textual==8.2.8
     # via -r base.in
 typing-extensions==4.16.0
     # via
