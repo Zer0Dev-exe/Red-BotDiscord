@@ -10,7 +10,7 @@ aiosignal==1.4.0
     # via aiohttp
 apsw==3.53.4.0
     # via -r base.in
-attrs==25.3.0
+attrs==26.1.0
     # via aiohttp
 babel==2.18.0
     # via -r base.in
