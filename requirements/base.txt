@@ -22,7 +22,7 @@ discord-py==2.7.1
     # via
     #   -r base.in
     #   red-lavalink
-filelock==3.20.3
+filelock==4.2.1
     # via python-discovery
 frozenlist==1.8.0
     # via
