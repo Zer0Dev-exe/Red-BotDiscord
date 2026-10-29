@@ -14,7 +14,7 @@ attrs==25.3.0
     # via aiohttp
 babel==2.18.0
     # via -r base.in
-brotli==1.2.0
+brotli==1.2.1
     # via -r base.in
 click==8.5.0
     # via -r base.in
