@@ -93,7 +93,7 @@ typing-extensions==4.16.0
     #   -r base.in
     #   multidict
     #   textual
-uc-micro-py==1.0.3
+uc-micro-py==2.0.0
     # via linkify-it-py
 yarl==1.25.1
     # via
